@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu de Navegação</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        nav {
+            background-color: #2c3e50;
+            padding: 1rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #34495e;
+        }
+
+        .nav-menu .active {
+            background-color: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul class="nav-menu">
+            <li><a href="../index.html">Início</a></li>
+            <li><a href="../estoque.html">Controle de Estoque</a></li>
+            <li><a href="../cadastro.html">Cadastro</a></li>
+            <li><a href="../relatorios.html">Relatórios</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

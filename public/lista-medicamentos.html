@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Medicamentos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            gap: 15px;
+            text-align: center;
+            width: 100%;
+            font-weight: 600;
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        nav {
+            background-color: #34495e;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #2c3e50;
+        }
+
+        .filters {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: 500;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .pagination button:hover:not(.active) {
+            background-color: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .status-badge.critico {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .status-badge.baixo {
+            background-color: #f1c40f;
+            color: #2c3e50;
+        }
+
+        .status-badge.normal {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .quantity-input {
+            width: 71px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #2ecc71;
+            color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav li {
+                margin: 5px 0;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                margin: 0 -20px;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-pills"></i> Lista de Medicamentos</h1>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Início</a></li>
+            <li><a href="../cadastro.html">Cadastro</a></li>
+            <li><a href="lista-medicamentos.html">Medicamentos</a></li>
+            <li><a href="../estoque.html">Controle de Estoque</a></li>
+            <li><a href="../relatorios.html">Relatórios</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div class="filters">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="searchInput">Buscar por nome</label>
+                    <input type="text" id="searchInput" placeholder="Digite o nome...">
+                </div>
+                <div class="filter-group">
+                    <label for="categoriaFilter">Categoria</label>
+                    <select id="categoriaFilter">
+                        <option value="">Todas</option>
+                        <option value="analgesico">Analgésico</option>
+                        <option value="antibiotico">Antibiótico</option>
+                        <option value="anti-inflamatorio">Anti-inflamatório</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Status</label>
+                    <select id="statusFilter">
+                        <option value="">Todos</option>
+                        <option value="disponivel">Disponível</option>
+                        <option value="baixo-estoque">Baixo Estoque</option>
+                        <option value="indisponivel">Indisponível</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-buttons">
+                <button class="btn btn-secondary" onclick="limparFiltros()"><i class="fas fa-undo"></i> Limpar Filtros</button>
+                <button class="btn btn-primary" onclick="atualizarDados()"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                <button class="btn btn-primary" onclick="exportarDados()"><i class="fas fa-file-export"></i> Exportar</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Fabricante</th>
+                        <th>Concentração</th>
+                        <th>Forma Farmacêutica</th>
+                        <th>Quantidade</th>
+                        <th>Estoque Mínimo</th>
+                        <th>Validade</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="medicamentosTableBody">
+                    <!-- Dados serão inseridos via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination" id="pagination">
+            <!-- Paginação será inserida via JavaScript -->
+        </div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Configuração da paginação
+        const itemsPorPagina = 5;
+        let paginaAtual = 1;
+
+    <script src="../js/estoqueManager.js"></script>
+    <script>
+        // Inicializar e carregar dados do estoque
+        document.addEventListener('DOMContentLoaded', async () => {
+            await estoqueManager.carregarDados();
+            preencherTabela();
+
+            // Registrar observador para atualizações automáticas
+            estoqueManager.adicionarObservador((estado) => {
+                if (estado.error) {
+                    mostrarToast(estado.error, 'error');
+                    return;
+                }
+                if (estado.isLoading) {
+                    mostrarToast('Carregando dados...', 'info');
+                    return;
+                }
+                preencherTabela();
+            });
+
+            // Adicionar listeners para filtros
+            document.getElementById('searchInput').addEventListener('input', preencherTabela);
+            document.getElementById('categoriaFilter').addEventListener('change', preencherTabela);
+            document.getElementById('statusFilter').addEventListener('change', preencherTabela);
+        });
+
+        function filtrarMedicamentos() {
+            const termo = document.getElementById('searchInput').value.toLowerCase();
+            const categoria = document.getElementById('categoriaFilter').value;
+            const status = document.getElementById('statusFilter').value;
+
+            return estoqueManager.medicamentos.filter(med =>
+                med.nome.toLowerCase().includes(termo) &&
+                (categoria === '' || med.categoria === categoria) &&
+                (status === '' || estoqueManager.determinarStatus(med.quantidade, med.estoqueMinimo).toLowerCase() === status)
+            );
+        }
+
+        async function atualizarDados() {
+            const toast = document.getElementById('toast');
+            toast.textContent = 'Atualizando dados...';
+            toast.style.display = 'block';
+            toast.style.backgroundColor = '#3498db';
+            
+            try {
+                await estoqueManager.carregarDados();
+                toast.textContent = 'Dados atualizados com sucesso!';
+                toast.style.backgroundColor = '#2ecc71';
+            } catch (error) {
+                toast.textContent = 'Erro ao atualizar dados!';
+                toast.style.backgroundColor = '#e74c3c';
+            }
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        function preencherTabela() {
+            const medicamentosFiltrados = filtrarMedicamentos();
+            const inicio = (paginaAtual - 1) * itemsPorPagina;
+            const fim = inicio + itemsPorPagina;
+            const medicamentosPaginados = medicamentosFiltrados.slice(inicio, fim);
+
+            const tbody = document.getElementById('medicamentosTableBody');
+            tbody.innerHTML = '';
+
+            medicamentosPaginados.forEach(med => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${med.nome}</td>
+                    <td>${med.fabricante}</td>
+                    <td>${med.concentracao}</td>
+                    <td>${med.formaFarmaceutica}</td>
+                    <td>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="alterarQuantidade(${med.id}, -1)">-</button>
+                            <input type="number" class="quantity-input" value="${med.quantidade}" onchange="atualizarQuantidade(${med.id}, this.value)">
+                            <button class="quantity-btn" onclick="alterarQuantidade(${med.id}, 1)">+</button>
+                        </div>
+                    </td>
+                    <td>${med.estoqueMinimo}</td>
+                    <td>${new Date(med.validade).toLocaleDateString('pt-BR')}</td>
+                    <td><span class="status-badge ${estoqueManager.determinarStatus(med.quantidade, med.estoqueMinimo).toLowerCase()}">${estoqueManager.determinarStatus(med.quantidade, med.estoqueMinimo)}</span></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editarMedicamento(${med.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-secondary" onclick="excluirMedicamento(${med.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            atualizarPaginacao(medicamentosFiltrados.length);
+        }
+
+        function atualizarPaginacao(total) {
+            const totalPaginas = Math.ceil(total / itemsPorPagina);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            if (totalPaginas > 1) {
+                // Botão anterior
+                const btnAnterior = document.createElement('button');
+                btnAnterior.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                btnAnterior.disabled = paginaAtual === 1;
+                btnAnterior.onclick = () => mudarPagina(paginaAtual - 1);
+                pagination.appendChild(btnAnterior);
+
+                // Páginas
+                for (let i = 1; i <= totalPaginas; i++) {
+                    const btn = document.createElement('button');
+                    btn.textContent = i;
+                    btn.classList.toggle('active', i === paginaAtual);
+                    btn.onclick = () => mudarPagina(i);
+                    pagination.appendChild(btn);
+                }
+
+                // Botão próximo
+                const btnProximo = document.createElement('button');
+                btnProximo.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                btnProximo.disabled = paginaAtual === totalPaginas;
+                btnProximo.onclick = () => mudarPagina(paginaAtual + 1);
+                pagination.appendChild(btnProximo);
+            }
+        }
+
+        function mudarPagina(pagina) {
+            paginaAtual = pagina;
+            preencherTabela();
+        }
+
+        function limparFiltros() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoriaFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            paginaAtual = 1;
+            preencherTabela();
+            mostrarToast('Filtros limpos com sucesso!');
+        }
+
+        async function alterarQuantidade(id, delta) {
+            const medicamento = estoqueManager.medicamentos.find(m => m.id === id);
+            if (medicamento) {
+                const novaQuantidade = medicamento.quantidade + delta;
+                if (novaQuantidade >= 0) {
+                    await atualizarQuantidade(id, novaQuantidade);
+                }
+            }
+        }
+
+        async function atualizarQuantidade(id, novaQuantidade) {
+            try {
+                await estoqueManager.atualizarQuantidade(id, parseInt(novaQuantidade));
+                mostrarToast('Quantidade atualizada com sucesso!');
+                preencherTabela();
+            } catch (error) {
+                mostrarToast('Erro ao atualizar quantidade!', 'error');
+            }
+        }
+
+        async function editarMedicamento(id) {
+            window.location.href = `../cadastro.html?id=${id}`;
+        }
+
+        async function excluirMedicamento(id) {
+            if (confirm('Tem certeza que deseja excluir este medicamento?')) {
+                try {
+                    await estoqueManager.excluirMedicamento(id);
+                    mostrarToast('Medicamento excluído com sucesso!');
+                    preencherTabela();
+                } catch (error) {
+                    mostrarToast('Erro ao excluir medicamento!', 'error');
+                }
+            }
+        }
+
+        function exportarDados() {
+            const medicamentosFiltrados = filtrarMedicamentos();
+            const csv = medicamentosFiltrados.map(med => 
+                Object.values(med).join(',')
+            ).join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'medicamentos.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            mostrarToast('Dados exportados com sucesso!');
+        }
+
+        function mostrarToast(mensagem, tipo = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = mensagem;
+            toast.style.display = 'block';
+            
+            switch(tipo) {
+                case 'error':
+                    toast.style.backgroundColor = '#e74c3c';
+                    break;
+                case 'info':
+                    toast.style.backgroundColor = '#3498db';
+                    break;
+                default:
+                    toast.style.backgroundColor = '#2ecc71';
+            }
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', () => {
+            paginaAtual = 1;
+            preencherTabela();
+        });
+
+        document.getElementById('categoriaFilter').addEventListener('change', () => {
+            paginaAtual = 1;
+            preencherTabela();
+        });
+
+        document.getElementById('statusFilter').addEventListener('change', () => {
+            paginaAtual = 1;
+            preencherTabela();
+        });
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            preencherTabela();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Medicamentos</title>
+    <link rel="stylesheet" href="cadastro.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Histórico de Medicamentos</h1>
+
+        <div class="filtros">
+            <div class="form-group">
+                <label for="dataInicio">Data Início:</label>
+                <input type="date" id="dataInicio" name="dataInicio">
+            </div>
+            <div class="form-group">
+                <label for="dataFim">Data Fim:</label>
+                <input type="date" id="dataFim" name="dataFim">
+            </div>
+            <div class="form-group">
+                <label for="medicamento">Medicamento:</label>
+                <select id="medicamento" name="medicamento">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <button onclick="filtrarHistorico()">Filtrar</button>
+        </div>
+
+        <div class="graficos">
+            <canvas id="graficoConsumo"></canvas>
+        </div>
+
+        <div class="tabela-container">
+            <table id="tabelaHistorico">
+                <thead>
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Medicamento</th>
+                        <th>Quantidade</th>
+                        <th>Tipo</th>
+                        <th>Responsável</th>
+                        <th>Observação</th>
+                    </tr>
+                </thead>
+                <tbody id="historicoTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/historico.js"></script>
+</body>
+</html>

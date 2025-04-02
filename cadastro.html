@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Medicamentos - SisGeMed</title>
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            gap: 15px;
+            text-align: center;
+            width: 100%;
+            font-weight: 600;
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        nav {
+            background-color: #34495e;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #2c3e50;
+        }
+    </style>
+    <link rel="stylesheet" href="cadastro.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-pills"></i> Sistema de Gestão de Medicamentos</h1>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Início</a></li>
+            <li><a href="cadastro.html">Cadastro</a></li>
+            <li><a href="public/lista-medicamentos.html">Medicamentos</a></li>
+            <li><a href="estoque.html">Controle de Estoque</a></li>
+            <li><a href="relatorios.html">Relatórios</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section class="form-section">
+            <h2><i class="fas fa-pills"></i> Cadastro de Medicamento</h2>
+            <form id="medicamentoForm" class="cadastro-form">
+                <div class="form-group">
+                    <label for="nome">Nome do Medicamento*</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade*</label>
+                        <input type="number" id="quantidade" name="quantidade" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="validade">Data de Validade*</label>
+                        <input type="date" id="validade" name="validade" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="lote">Número do Lote*</label>
+                        <input type="text" id="lote" name="lote" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fabricante">Fabricante*</label>
+                        <input type="text" id="fabricante" name="fabricante" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="concentracao">Concentração*</label>
+                        <input type="text" id="concentracao" name="concentracao" placeholder="Ex: 500mg" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="formaFarmaceutica">Forma Farmacêutica*</label>
+                        <select id="formaFarmaceutica" name="formaFarmaceutica" required>
+                            <option value="">Selecione...</option>
+                            <option value="comprimido">Comprimido</option>
+                            <option value="capsula">Cápsula</option>
+                            <option value="xarope">Xarope</option>
+                            <option value="suspensao">Suspensão</option>
+                            <option value="pomada">Pomada</option>
+                            <option value="creme">Creme</option>
+                            <option value="gel">Gel</option>
+                            <option value="solucao">Solução</option>
+                            <option value="injetavel">Injetável</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="posologia">Posologia*</label>
+                        <input type="text" id="posologia" name="posologia" placeholder="Ex: 1 comprimido" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="viaAdministracao">Via de Administração*</label>
+                        <select id="viaAdministracao" name="viaAdministracao" required>
+                            <option value="">Selecione...</option>
+                            <option value="oral">Oral</option>
+                            <option value="sublingual">Sublingual</option>
+                            <option value="topica">Tópica</option>
+                            <option value="retal">Retal</option>
+                            <option value="intramuscular">Intramuscular</option>
+                            <option value="intravenosa">Intravenosa</option>
+                            <option value="subcutanea">Subcutânea</option>
+                            <option value="nasal">Nasal</option>
+                            <option value="oftalmica">Oftálmica</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="intervalo">Intervalo de Administração*</label>
+                        <input type="text" id="intervalo" name="intervalo" placeholder="Ex: 8 em 8 horas" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duracaoTratamento">Duração do Tratamento</label>
+                        <input type="text" id="duracaoTratamento" name="duracaoTratamento" placeholder="Ex: 7 dias">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contraindicacoes">Contraindicações</label>
+                    <textarea id="contraindicacoes" name="contraindicacoes" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="efeitosColaterais">Efeitos Colaterais</label>
+                    <textarea id="efeitosColaterais" name="efeitosColaterais" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" name="descricao" rows="4"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" class="button secondary">Limpar</button>
+                    <button type="submit" class="button primary">Cadastrar</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Sistema de Gestão de Medicamentos. Todos os direitos reservados.</p>
+    </footer>
+    <script src="js/cadastro.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Medicamento {
+  id                Int      @id @default(autoincrement())
+  nome              String
+  quantidade        Int
+  validade          DateTime
+  lote              String
+  fabricante        String
+  concentracao      String
+  formaFarmaceutica String
+  descricao         String?
+  posologia         String
+  viaAdministracao  String
+  intervalo         String
+  duracaoTratamento String?
+  contraindicacoes  String?
+  efeitosColaterais String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  movimentacoes     Movimentacao[]
+}
+
+model Movimentacao {
+  id            Int         @id @default(autoincrement())
+  tipo          String      // "entrada" ou "saida"
+  quantidade    Int
+  data          DateTime    @default(now())
+  responsavel   String
+  observacao    String?
+  medicamento   Medicamento @relation(fields: [medicamentoId], references: [id])
+  medicamentoId Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Usuario {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  email       String   @unique
+  senha       String
+  cargo       String   @default("atendente")
+  ativo       Boolean  @default(true)
+  ultimoLogin DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  notificacoes Notificacao[]
+}
+
+model Notificacao {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  mensagem  String
+  data      DateTime
+  lida      Boolean  @default(false)
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
