@@ -1,19 +1,21 @@
 const express = require('express');
 const cors = require('cors');
-const { PrismaClient } = require('@prisma/client');
-const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const auth = require('./middleware/auth');
-const notificacoesRouter = require('./src/routes/notificacoes').default;
-
-dotenv.config();
+const { PrismaClient } = require('@prisma/client');
+const authMiddleware = require('./middleware/auth');
 
 const prisma = new PrismaClient();
 const app = express();
 
+const port = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(express.json());
+
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
+});
 
 // Rotas
 app.use('/api/notificacoes', notificacoesRouter);
@@ -231,10 +233,7 @@ app.get('/api/movimentacoes', async (req, res) => {
 // Rota para atualizar medicamento
 app.put('/api/medicamentos/:id', async (req, res) => {
   try {
-    const medicamento = await prisma.medicamento.update({
-      where: { id: parseInt(req.params.id) },
-      data: req.body
-    });
+    const medicamento = await medicamentoModel.update(parseInt(req.params.id), req.body);
     res.json(medicamento);
   } catch (error) {
     console.error('Erro ao atualizar medicamento:', error);

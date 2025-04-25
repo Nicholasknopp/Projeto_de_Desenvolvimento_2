@@ -1,120 +1,187 @@
-// Função para carregar os medicamentos no select de filtro
-async function carregarMedicamentos() {
-    try {
-        const response = await fetch('http://localhost:3000/api/medicamentos');
-        const medicamentos = await response.json();
-        const select = document.getElementById('medicamento');
+let paginaAtual = 1;
+const itensPorPagina = 10;
+let historicoCompleto = [];
+let graficoMovimentacoes = null;
 
-        medicamentos.forEach(med => {
-            const option = document.createElement('option');
-            option.value = med.id;
-            option.textContent = med.nome;
-            select.appendChild(option);
-        });
+async function carregarHistoricoDetalhado() {
+    try {
+        // Simular carregamento de dados do backend
+        historicoCompleto = await simularDadosHistorico();
+        atualizarTabelaHistorico();
+        atualizarPaginacao();
+        carregarMedicamentosNoFiltro();
     } catch (error) {
-        console.error('Erro ao carregar medicamentos:', error);
+        console.error('Erro ao carregar histórico:', error);
+        alert('Erro ao carregar histórico detalhado');
     }
 }
 
-// Função para formatar data
-function formatarData(data) {
-    return new Date(data).toLocaleString('pt-BR');
-}
+function simularDadosHistorico() {
+    // Função temporária para simular dados
+    return new Promise(resolve => {
+        const formasFarmaceuticas = ['Comprimido', 'Cápsula', 'Xarope', 'Pomada', 'Injetável'];
+        const categorias = ['Antibiótico', 'Anti-inflamatório', 'Analgésico', 'Antialérgico', 'Antiviral'];
+        const dados = [];
 
-// Função para filtrar o histórico
-async function filtrarHistorico() {
-    const dataInicio = document.getElementById('dataInicio').value;
-    const dataFim = document.getElementById('dataFim').value;
-    const medicamentoId = document.getElementById('medicamento').value;
-
-    try {
-        let url = 'http://localhost:3000/api/movimentacoes';
-        const params = new URLSearchParams();
-
-        if (dataInicio) params.append('dataInicio', dataInicio);
-        if (dataFim) params.append('dataFim', dataFim);
-        if (medicamentoId) params.append('medicamentoId', medicamentoId);
-
-        if (params.toString()) {
-            url += '?' + params.toString();
+        for (let i = 0; i < 50; i++) {
+            const dataValidade = new Date(Date.now() + Math.random() * 365 * 24 * 60 * 60 * 1000);
+            dados.push({
+                medicamento: `Medicamento ${i + 1}`,
+                quantidade: Math.floor(Math.random() * 100) + 1,
+                dataValidade: dataValidade,
+                fabricante: `Fabricante ${Math.floor(Math.random() * 10) + 1}`,
+                concentracao: `${Math.floor(Math.random() * 500) + 100}mg`,
+                formaFarmaceutica: formasFarmaceuticas[Math.floor(Math.random() * formasFarmaceuticas.length)],
+                categoria: categorias[Math.floor(Math.random() * categorias.length)]
+            });
         }
 
-        const response = await fetch(url);
-        const movimentacoes = await response.json();
-
-        atualizarTabela(movimentacoes);
-        atualizarGrafico(movimentacoes);
-    } catch (error) {
-        console.error('Erro ao filtrar histórico:', error);
-    }
-}
-
-// Função para atualizar a tabela de histórico
-function atualizarTabela(movimentacoes) {
-    const tbody = document.getElementById('historicoTableBody');
-    tbody.innerHTML = '';
-
-    movimentacoes.forEach(mov => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${formatarData(mov.data)}</td>
-            <td>${mov.medicamento.nome}</td>
-            <td>${mov.quantidade}</td>
-            <td>${mov.tipo}</td>
-            <td>${mov.responsavel}</td>
-            <td>${mov.observacao || '-'}</td>
-        `;
-        tbody.appendChild(tr);
+        resolve(dados.sort((a, b) => b.data - a.data));
     });
 }
 
-// Função para atualizar o gráfico de consumo
-function atualizarGrafico(movimentacoes) {
-    const ctx = document.getElementById('graficoConsumo').getContext('2d');
-    const dados = processarDadosGrafico(movimentacoes);
+function carregarMedicamentosNoFiltro() {
+    const selectMedicamento = document.getElementById('filtroMedicamento');
+    const medicamentosUnicos = [...new Set(historicoCompleto.map(h => h.medicamento))];
+    
+    selectMedicamento.innerHTML = '<option value="">Todos os Medicamentos</option>' +
+        medicamentosUnicos.map(med => `<option value="${med}">${med}</option>`).join('');
+}
 
-    new Chart(ctx, {
-        type: 'line',
+function filtrarHistorico() {
+    const dataInicio = document.getElementById('dataInicio').value;
+    const dataFim = document.getElementById('dataFim').value;
+    const tipoMovimentacao = document.getElementById('filtroTipoMovimentacao').value;
+    const medicamento = document.getElementById('filtroMedicamento').value;
+
+    let resultadosFiltrados = [...historicoCompleto];
+    atualizarGraficoMovimentacoes(resultadosFiltrados);
+
+    if (dataInicio) {
+        resultadosFiltrados = resultadosFiltrados.filter(h => 
+            h.data >= new Date(dataInicio));
+    }
+
+    if (dataFim) {
+        resultadosFiltrados = resultadosFiltrados.filter(h => 
+            h.data <= new Date(dataFim + 'T23:59:59'));
+    }
+
+    if (tipoMovimentacao) {
+        resultadosFiltrados = resultadosFiltrados.filter(h => 
+            h.tipo.toLowerCase() === tipoMovimentacao.toLowerCase());
+    }
+
+    if (medicamento) {
+        resultadosFiltrados = resultadosFiltrados.filter(h => 
+            h.medicamento === medicamento);
+    }
+
+    historicoCompleto = resultadosFiltrados;
+    paginaAtual = 1;
+    atualizarTabelaHistorico();
+    atualizarPaginacao();
+}
+
+function atualizarTabelaHistorico() {
+    const tbody = document.getElementById('historicoTableBody');
+    if (!tbody) return;
+
+    const inicio = (paginaAtual - 1) * itensPorPagina;
+    const fim = inicio + itensPorPagina;
+    const dadosPagina = historicoCompleto.slice(inicio, fim);
+
+    tbody.innerHTML = dadosPagina.map(med => {
+        return `
+            <tr>
+                <td>${med.medicamento}</td>
+                <td>${med.quantidade}</td>
+                <td>${formatarData(med.dataValidade)}</td>
+                <td>${med.fabricante}</td>
+                <td>${med.concentracao}</td>
+                <td>${med.formaFarmaceutica}</td>
+                <td>${med.categoria}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function atualizarPaginacao() {
+    const totalPaginas = Math.ceil(historicoCompleto.length / itensPorPagina);
+    document.getElementById('paginaAtual').textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+    
+    document.getElementById('btnAnterior').disabled = paginaAtual === 1;
+    document.getElementById('btnProximo').disabled = paginaAtual === totalPaginas;
+}
+
+function mudarPagina(direcao) {
+    const totalPaginas = Math.ceil(historicoCompleto.length / itensPorPagina);
+    const novaPagina = paginaAtual + direcao;
+
+    if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+        paginaAtual = novaPagina;
+        atualizarTabelaHistorico();
+        atualizarPaginacao();
+    }
+}
+
+function formatarData(data) {
+    return new Date(data).toLocaleDateString('pt-BR');
+}
+
+function atualizarGraficoMovimentacoes(dados) {
+    const ctx = document.getElementById('graficoMovimentacoes').getContext('2d');
+    
+    if (graficoMovimentacoes) {
+        graficoMovimentacoes.destroy();
+    }
+
+    const dadosPorTipo = {
+        Entrada: 0,
+        Saída: 0,
+        Ajuste: 0,
+        Perda: 0
+    };
+
+    dados.forEach(mov => {
+        dadosPorTipo[mov.tipo]++;
+    });
+
+    graficoMovimentacoes = new Chart(ctx, {
+        type: 'bar',
         data: {
-            labels: dados.labels,
+            labels: Object.keys(dadosPorTipo),
             datasets: [{
-                label: 'Consumo de Medicamentos',
-                data: dados.valores,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
+                label: 'Quantidade de Movimentações por Tipo',
+                data: Object.values(dadosPorTipo),
+                backgroundColor: [
+                    '#28a745',
+                    '#dc3545',
+                    '#ffc107',
+                    '#6c757d'
+                ]
             }]
         },
         options: {
             responsive: true,
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
                 }
             }
         }
     });
 }
 
-// Função para processar dados do gráfico
-function processarDadosGrafico(movimentacoes) {
-    const dadosPorData = {};
-
-    movimentacoes.forEach(mov => {
-        const data = mov.data.split('T')[0];
-        if (!dadosPorData[data]) {
-            dadosPorData[data] = 0;
-        }
-        dadosPorData[data] += mov.tipo === 'saida' ? mov.quantidade : 0;
-    });
-
-    const labels = Object.keys(dadosPorData).sort();
-    const valores = labels.map(data => dadosPorData[data]);
-
-    return { labels, valores };
-}
-
-// Carregar medicamentos ao iniciar a página
+// Inicializar a página
 document.addEventListener('DOMContentLoaded', () => {
-    carregarMedicamentos();
-    filtrarHistorico();
+    carregarHistoricoDetalhado();
+
+    // Adicionar eventos aos botões
+    document.getElementById('btnFiltrarHistorico').addEventListener('click', filtrarHistorico);
+    document.getElementById('btnAnterior').addEventListener('click', () => mudarPagina(-1));
+    document.getElementById('btnProximo').addEventListener('click', () => mudarPagina(1));
 });
