@@ -254,11 +254,12 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
-                <li><a href="estoque.html"><i class="fas fa-box"></i> Controle de Estoque</a></li>
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Início</a></li>
                 <li><a href="cadastro.html"><i class="fas fa-plus-circle"></i> Cadastro</a></li>
+                <li><a href="public/lista-medicamentos.html"><i class="fas fa-box"></i>Medicamentos</a></li>
+                <li><a href="estoque.html"><i class="fas fa-box"></i> Controle de Estoque</a></li>
                 <li><a href="relatorios.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
-                <li><a href="historico-detalhado.html" class="active"><i class="fas fa-history"></i> Histórico</a></li>
+                <li><a href="historico-detalhado.html"><i class="fas fa-history"></i> Histórico</a></li>
             </ul>
         </nav>
     </header>
@@ -327,15 +328,7 @@
             </button>
         </div>
 
-        <div class="grafico-container">
-            <h3 class="grafico-titulo">Movimentações por Período</h3>
-            <canvas id="graficoMovimentacoes"></canvas>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 Sistema de Gestão de Medicamentos. Todos os direitos reservados.</p>
-    </footer>
+       
 
     <script src="js/historico.js"></script>
 </body>

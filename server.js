@@ -3,15 +3,17 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
-const authMiddleware = require('./middleware/auth');
+const auth = require('./middleware/auth');
+const notificacoesRouter = require('./src/routes/notificacoes');
 
 const prisma = new PrismaClient();
 const app = express();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname));
 
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);

@@ -86,7 +86,7 @@
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h1>Sistema de Gestão de Medicamentos</h1>
+            <h1>Dosefy-Sistema de Gestão de Medicamentos</h1>
             <p>Criar nova conta</p>
         </div>
         <form id="registerForm" class="login-form">
@@ -131,7 +131,7 @@
             }
 
             try {
-                const response = await fetch('/api/usuarios', {
+                const response = await fetch('/api/register.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

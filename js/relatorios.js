@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar o gerenciador de estoque
+    window.estoqueManager = new EstoqueManager();
+    
     // Configuração inicial dos gráficos
     inicializarGraficos();
     

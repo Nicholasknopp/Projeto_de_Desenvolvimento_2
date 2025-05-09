@@ -10,9 +10,7 @@ const auth = async (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const usuario = await usuarioModel.findById(
-            where: { id: decoded.id }
-        });
+        const usuario = await usuarioModel.findById(decoded.id);
 
         if (!usuario) {
             throw new Error('Usuário não encontrado');
