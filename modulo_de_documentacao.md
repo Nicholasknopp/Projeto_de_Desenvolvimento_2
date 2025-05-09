@@ -359,6 +359,19 @@ class RelatorioService {
 
 Visão Geral: O Dosefy-Sistema de Gestão de Medicamentos segue uma arquitetura em camadas baseada no padrão MVC (Model-View-Controller), com uma clara separação de responsabilidades entre frontend e backend. A aplicação é construída sobre uma arquitetura cliente-servidor, onde o frontend é responsável pela interface do usuário e o backend gerencia a lógica de negócios e persistência de dados. 
 
+# Parte Visual 
+
+### Parte de login
+![Captura de tela_7-5-2025_15753_](https://github.com/user-attachments/assets/c336a4e0-f674-47b7-a8fb-c9ec189ba483)
+
+### Parte de criar conta 
+![Captura de tela_7-5-2025_15854_](https://github.com/user-attachments/assets/a52fe612-43e0-40a9-bd9b-f9b46914d661)
+
+### Parte de recuperação de senha 
+![Captura de tela_7-5-2025_151111_](https://github.com/user-attachments/assets/b68515ea-e947-4339-81fb-559e97e9a018)
+
+
+
 ### Casos de Uso & Histórias de Usuário: 
 
 Registro de Medicamento: Paciente registra medicamentos com nome, dosagem, frequência, e datas de início/término. 
