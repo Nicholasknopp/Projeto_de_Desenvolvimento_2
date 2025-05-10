@@ -423,7 +423,7 @@ O Dosefy demonstrou ser uma solução eficaz para gerenciar o uso de medicamento
 
  
 
-A solução implementada alcançou os objetivos estabelecidos, proporcionando: 
+A solução implementada como objetivos estabelecidos, proporcionando: 
 
 Um controle eficaz de dosagens e horários; 
 
@@ -433,7 +433,7 @@ Alertas personalizados e controle de estoque domiciliar;
 
 E um sistema seguro com proteção de dados sensíveis. 
 
-Com base nas validações realizadas com usuários reais, o projeto demonstrou impacto direto na adesão ao tratamento, redução de falhas no uso de medicamentos e uma melhoria geral na organização e segurança no acompanhamento terapêutico. O retorno dos profissionais de saúde também foi positivo, destacando a utilidade clínica dos relatórios e do histórico de medicação. 
+O projeto demonstra impacto direto na adesão ao tratamento, redução de falhas no uso de medicamentos e uma melhoria geral na organização e segurança no acompanhamento terapêutico. O retorno dos profissionais de saúde também vai ser positivo, destacando a utilidade clínica dos relatórios e do histórico de medicação. 
 
 ### Limitações do Projeto e Perspectivas Futuras 
 
