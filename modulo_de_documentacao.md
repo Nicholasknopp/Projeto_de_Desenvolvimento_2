@@ -375,7 +375,8 @@ Visão Geral: O Dosefy-Sistema de Gestão de Medicamentos segue uma arquitetura 
 ![Nicholas Knopp Seferin da Silva - Canvas MVP Sistema de Gestão de Medicamentos ](https://github.com/user-attachments/assets/e1ebc30e-710a-4227-8c12-334b4f69ca92)
 
 ### Análise de sistemas correlatos (Benchmarking) 
-![Captura de tela_10-5-2025_85144_](https://github.com/user-attachments/assets/8314d29c-9246-4f25-9159-43cfdb58276b)
+![Captura de tela_10-5-2025_85935_](https://github.com/user-attachments/assets/65b20c84-9207-4320-a6f8-94d9a084218f)
+
 
 ![Captura de tela_10-5-2025_85531_](https://github.com/user-attachments/assets/99a82b01-11ad-4e5f-adc9-8ca2f2cb221b)
 
